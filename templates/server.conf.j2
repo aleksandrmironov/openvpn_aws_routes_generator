@@ -1,0 +1,38 @@
+port 8888
+proto tcp
+dev tun
+
+ca /etc/openvpn/easy-rsa/keys/ca.crt
+cert /etc/openvpn/easy-rsa/keys/openvpn.crt
+key /etc/openvpn/easy-rsa/keys/openvpn.key
+dh /etc/openvpn/easy-rsa/keys/dh2048.pem
+
+server 10.0.0.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+keepalive 10 120
+
+tls-server
+tls-auth /etc/openvpn/easy-rsa/keys/ta.key 0
+
+cipher DES-EDE3-CBC  # Triple-DES
+auth MD5
+
+crl-verify /etc/openvpn/crl.pem
+
+user nobody
+group nogroup
+
+persist-key
+persist-tun
+
+comp-lzo adaptive
+
+status /var/log/openvpn/openvpn-status.log
+log         /var/log/openvpn/openvpn.log
+
+verb 3
+
+{% for host in hosts %}
+#{{ host['name'] }}
+push route "{{ host['ext_ipv4'] }} 255.255.255.255"
+{% endfor %}

@@ -1,0 +1,12 @@
+[main]
+region: eu-west-1
+aws_access_key_id: key
+aws_secret_access_key: secret
+config_file: /etc/openvpn/server.conf
+service: openvpn
+
+[persistent]
+addresses: 1.2.3.4
+
+[excluded]
+instances: my_excluded_instance
